@@ -1,4 +1,5 @@
-docker run --name crm-clientmanagement -e MYSQL_ROOT_PASSWORD=mysql -e MYSQL_DATABASE=clients -p 3306:3306 -d mysql:latest for my sql 
+docker run --name crm-clientmanagement -e MYSQL_ROOT_PASSWORD=mysql -e MYSQL_DATABASE=clients -p 3306:3306 -d mysql:latest
+ for my sql 
 
 
 dependencies : 

@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls), 
     path('clients/', ClientCreateAPIView.as_view(), name='create_client'),
     path('interactions/', InteractionCreateAPIView.as_view(), name='create_interaction'),
+    path('clients/<int:id>/', ClientCreateAPIView.as_view(), name='get-client-by-id'),
     
 ]

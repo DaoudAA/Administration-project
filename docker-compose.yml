@@ -1,0 +1,45 @@
+
+services:
+  # MySQL for CRM Client Management
+  mysql:
+    image: mysql:latest
+    container_name: crm-clientmanagement
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: clients
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # PostgreSQL for Ticket Management
+  postgres:
+    image: postgres:14-alpine
+    container_name: ticket-management
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: user
+      POSTGRES_USER: user
+      POSTGRES_DB: db_tickets
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # SQL Server Express for Order Management
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: order-management
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_SA_PASSWORD: 'YourStrong!Password'
+      MSSQL_PID: 'Developer' 
+      MSSQL_TCP_PORT: 1433 
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+volumes:
+  mysql_data:
+  postgres_data:
+  mssql_data:
