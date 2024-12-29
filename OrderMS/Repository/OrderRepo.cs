@@ -28,13 +28,16 @@ namespace OrderMS.Repository
 
         public void insertOrder(Order order)
         {
+            order.totalPrice = order.OrderItems.Sum(item => item.Price * item.Quantity);
             _context.Orders.Add(order);
         }
 
         public void updateOrder(Order order)
         {
+            order.totalPrice = order.OrderItems.Sum(item => item.Price * item.Quantity);
             _context.Orders.Update(order);
         }
+
 
         public void deleteOrder(int orderId)
         {
