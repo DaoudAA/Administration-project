@@ -39,7 +39,10 @@ public class TicketController {
 
     @PostMapping("/order")
     public ResponseEntity<Ticket> createOrderTicket(@RequestBody OrderTicket orderTicket) {
-        return ResponseEntity.ok(ticketService.createTicket(orderTicket));
+        Ticket savedTicket = ticketService.createTicket(orderTicket);
+        // Check if the ticket is an OrderTicket before publishing
+        ticketService.publishOrderTicketEvent((OrderTicket) savedTicket);
+        return ResponseEntity.ok(savedTicket);
     }
 
     @PostMapping("/general")

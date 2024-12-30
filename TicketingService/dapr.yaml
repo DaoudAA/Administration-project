@@ -1,0 +1,25 @@
+version: 1
+common:
+  resourcesPath: ../components/
+apps:
+  - appID: ticketms
+    appDirPath: ./target/
+    appPort: 8083
+    command: ["java", "-jar", "TicketingService-1.0.0.jar"]
+  - appID: orderms
+    appDirPath: ../OrderMS
+    appPort: 5086
+    appProtocol: http
+    daprHttpPort: 3501
+    command: ["dotnet", "run", "--project", "./OrderMS.csproj"]
+  # - appID: orderms
+  #   appDir:  ../OrderMS/
+  #   appPort: 5086
+  #   command: ["dotnet", "run", "--project", "./OrderMS.csproj"]
+
+    
+# Run OrderMS Dapr instance
+#Start-Process "dapr" -ArgumentList "run --app-id orderms --app-port 5086 --app-protocol http --dapr-http-port 3501 -- dotnet run --project .\OrderMS\OrderMS.csproj"
+
+#dapr run --app-port 8083 --app-id ticketms -- java -jar target/TicketingService-1.0.0.jar
+#dapr run -f .

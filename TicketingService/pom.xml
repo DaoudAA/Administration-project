@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>tn.enit.crm</groupId>
 	<artifactId>TicketingService</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>TicketingService</name>
 	<description>Microsrvice of Ticket managemnt in crm Application </description>
 	<properties>
@@ -21,6 +21,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jdbc</artifactId>
 		</dependency>
+		<dependency>
+      <groupId>io.dapr</groupId>
+      <artifactId>dapr-sdk-springboot</artifactId>
+      <version>1.12.0</version>
+    </dependency>
+	<dependency>
+      <groupId>io.dapr</groupId>
+      <artifactId>dapr-sdk</artifactId>
+      <version>1.12.0</version>
+    </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
