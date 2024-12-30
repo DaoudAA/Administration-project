@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrderMS.Models;
+using Dapr.Client;
 using OrderMS.Repository;
 using System.Transactions;
 
@@ -35,21 +36,41 @@ namespace OrderMS.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Order order)
+        public async Task<IActionResult> Post([FromBody] Order order)
         {
             if (order == null)
             {
                 return BadRequest("Order is null.");
             }
 
-            using (var scope = new TransactionScope())
+            var daprClient = new DaprClientBuilder().Build();
+            var clientUrl = $"/clients/{order.clientId}/";
+
+            try
             {
-                _orderRepository.insertOrder(order);
-                _orderRepository.Save();
-                scope.Complete();
-                return CreatedAtRoute("GetOrderById", new { id = order.OrderId }, order);
+                // Debugging log for client URL
+                Console.WriteLine($"Invoking method: {clientUrl} on clientservice");
+
+                // Correct service-to-service invocation
+                var clientResponse = await daprClient.InvokeMethodAsync<Client>(HttpMethod.Get,"clientms", clientUrl);
+
+                using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    _orderRepository.insertOrder(order);
+                    _orderRepository.Save();
+                    scope.Complete();
+
+                    var message = $"Order {order.OrderId} related to {clientResponse.nom} is passed. Check your email {clientResponse.email}.";
+                    return CreatedAtRoute("GetOrderById", new { id = order.OrderId }, new { order, message });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception Details: {ex}");
+                return StatusCode(500, $"Failed to fetch client details: {ex.Message}");
             }
         }
+
 
         [HttpPut]
         public IActionResult Put([FromBody] Order order)
@@ -85,5 +106,14 @@ namespace OrderMS.Controllers
                 return Ok();
             }
         }
+    }
+    public class Client
+    {
+        public int Id { get; set; }
+        public string nom { get; set; }
+        public string email { get; set; }
+        public string telephone { get; set; }
+        public string adresse { get; set; }
+        public string dateInscription { get; set; }
     }
 }
